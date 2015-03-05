@@ -1,0 +1,340 @@
+Microsoft Windows [Version 6.3.9600]
+(c) 2013 Microsoft Corporation. All rights reserved.
+
+C:\Users\vspavan>mysql -u root -p
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 5.5.6-rc MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2010, Oracle and/or its affiliates. All rights reserved.
+This software comes with ABSOLUTELY NO WARRANTY. This is free software,
+and you are welcome to modify and redistribute it under the GPL v2 license
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use kk;
+Database changed
+mysql> show tables;
++--------------+
+| Tables_in_kk |
++--------------+
+| customer     |
+| delivery     |
+| department   |
+| employee     |
+| orderdetails |
+| product      |
+| shipping     |
++--------------+
+8 rows in set (0.00 sec)
+
+
+CUSTOMER TABLE
+----------------
+
+CREATE TABLE customer ( 
+		customerid INT(15) AUTO_INCREMENT PRIMARY KEY,
+		customername VARCHAR(30),
+		username VARCHAR(50) UNIQUE,
+		password VARCHAR(20),
+		age INT(10),
+		phoneno VARCHAR(10) UNIQUE,
+		address VARCHAR(100),
+            role INT(3) DEFAULT 4 );
+
+
+mysql> desc customer;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| customerid   | int(15)      | NO   | PRI | NULL    | auto_increment |
+| customername | varchar(30)  | YES  |     | NULL    |                |
+| username     | varchar(50)  | YES  | UNI | NULL    |                |
+| password     | varchar(20)  | YES  |     | NULL    |                |
+| age          | int(10)      | YES  |     | NULL    |                |
+| phoneno      | varchar(10)  | YES  | UNI | NULL    |                |
+| address      | varchar(100) | YES  |     | NULL    |                |
+| role         | int(3)       | YES  |     | 4       |                |
++--------------+--------------+------+-----+---------+----------------+
+8 rows in set (0.02 sec)
+
+mysql> select * from customer;
++------------+--------------+--------------------+----------+------+------------+------------+------+
+| customerid | customername | username           | password | age  | phoneno    | address    | role |
++------------+--------------+--------------------+----------+------+------------+------------+------+
+|          1 | admin        | admin@gmail.com    | admin123 |   22 | 0          | ts         |    1 |
+|          2 | pack         | pack@gmail.com     | pack123  |   21 | 100000000  | ts         |    2 |
+|          3 | shipping     | ship@gmail.com     | ship123  |   20 | 110000000  | ts         |    3 |
+|          4 | ram          | ram@gmail.com      | 123456   |   25 | 9126126126 | gachibowli |    4 |
+|          5 | rahul        | rahul@gmail.com    | 123456   |   21 | 8019904143 | hyd        |    4 |
+|          6 | sumith       | sumith@gmail.com   | 987654   |   16 | 9866445669 | hyd        |    4 |
+|          7 | nitin        | nitin@gmail.com    | 123456   |   30 | 99998888   | miyapur    |    4 |
+|          8 | raman        | raman@gmail.com    | 123456   |   50 | 99999876   | miyapur    |    4 |
+|          9 | teja         | navateja@gmail.com | qwerty   |   21 | 8098765432 | hyd        |    4 |
+|         10 | sai          | sai@gmail.com      | 1234567  |   21 | 8099005200 | delhi      |    4 |
+|         12 | harish       | harish@gmail.com   | harish   |   21 | 9494581503 | kalahasthi |    4 |
+|         13 | talent       | tsp@gmail.com      | 123456   |   23 | 1234567892 | delhi      |    4 |
++------------+--------------+--------------------+----------+------+------------+------------+------+
+12 rows in set (0.00 sec)
+
+
+DELIVERY TABLE
+-----------------
+
+mysql> create table delivery(orderid int(100) not null unique,datedelivered date not null,deliveredby varchar(200) not null,receivedby varchar(200) not null,phoneno varchar(10) not null,foreign key(orderid) references orderDetails(orderid));
+Query OK, 0 rows affected (0.10 sec)
+
+
+
+mysql> desc delivery;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| orderid       | varchar(100) | NO   | PRI | NULL    |       |
+| datedelivered | date         | NO   |     | NULL    |       |
+| deliveredby   | varchar(200) | NO   |     | NULL    |       |
+| receivedby    | varchar(200) | NO   |     | NULL    |       |
+| phoneno       | varchar(10)  | NO   |     | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+5 rows in set (0.07 sec)
+
+mysql> select * from delivery;
++---------+---------------+-------------+--------------+------------+
+| orderid | datedelivered | deliveredby | receivedby   | phoneno    |
++---------+---------------+-------------+--------------+------------+
+| 11      | 2013-11-04    | Laxman      | ram          | 9126126126 |
+| 12      | 2013-11-03    | Laxman      | rahul        | 8019904143 |
+| 14      | 2013-11-03    | Laxman      | sumith       | 9866445669 |
+| 16      | 2013-11-03    | Laxman      | nitin        | 99998888   |
+| 17      | 2013-11-04    | Laxman      | raman        | 99999876   |
+| orderid | 2013-11-03    | deliverby   | customername | phoneno    |
++---------+---------------+-------------+--------------+------------+
+6 rows in set (0.00 sec)
+
+
+DEPARTMENT TABLE
+------------------
+
+CREATE TABLE department (
+		deptno INT(10) NOT NULL UNIQUE PRIMARY KEY,
+		deptname VARCHAR(10) NOT NULL UNIQUE,
+		totalmembers INT(10) NOT NULL); 
+
+
+
+
+mysql> desc department;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| deptno       | varchar(3)  | YES  |     | NULL    |       |
+| deptname     | varchar(10) | YES  |     | NULL    |       |
+| totalmembers | varchar(3)  | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+3 rows in set (0.08 sec)
+
+mysql> select * from department;
++--------+-----------+--------------+
+| deptno | deptname  | totalmembers |
++--------+-----------+--------------+
+| 1      | a         | 3            |
+| 2      | packaging | 30           |
+| 2      | shipping  | 10           |
+| 3      | resp      | 10           |
++--------+-----------+--------------+
+4 rows in set (0.00 sec)
+
+
+EMPLOYEE TABLE
+----------------
+
+CREATE TABLE employee ( 
+		empid INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		empname VARCHAR(10) NOT NULL,
+		emailid VARCHAR(10) NOT NULL UNIQUE,
+		address VARCHAR(10) NOT NULL,
+		deptno INT(10) NOT NULL, 
+		FOREIGN KEY(deptno) REFERENCES DEPARTMENT(deptno)
+);
+
+
+
+mysql> desc employee;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| empid   | int(10)     | NO   | PRI | NULL    | auto_increment |
+| empname | varchar(10) | NO   |     | NULL    |                |
+| emailid | varchar(30) | YES  | UNI | NULL    |                |
+| address | varchar(10) | NO   |     | NULL    |                |
+| deptno  | int(10)     | NO   |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+5 rows in set (0.11 sec)
+
+mysql> select * from employee;
++-------+---------+-----------------+----------+--------+
+| empid | empname | emailid         | address  | deptno |
++-------+---------+-----------------+----------+--------+
+|     1 | raju    | raju@gmail.com  | hyd      |      1 |
+|     2 | ram     | ra@             | hyd      |      1 |
+|     3 | sham    | sham@gmail.com  | hyd      |      1 |
+|     4 | d       | ra1@gmail.com   | degvuyg  |      1 |
+|     5 | ashish  | as@gmail        | miyapur  |      2 |
+|     6 | qwe     | qwwe@wer        | qwertyui |      3 |
+|     7 | rahul   | rahul@gmail.com | hyd      |      2 |
++-------+---------+-----------------+----------+--------+
+7 rows in set (0.00 sec)
+
+
+ORDERDEATILS TABLE
+--------------------
+
+mysql> create table orderDetails(orderid int(50) not null primary key auto_increment,productname varchar(100) not null,orderdate date not null,customername varchar(100) not null,shippingdate date,phoneno varchar(10) not null);
+
+
+
+
+
+mysql> desc orderdetails;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| orderid      | int(50)      | NO   | PRI | NULL    | auto_increment |
+| productname  | varchar(100) | NO   |     | NULL    |                |
+| orderdate    | date         | NO   |     | NULL    |                |
+| customername | varchar(100) | NO   |     | NULL    |                |
+| shippingdate | date         | YES  |     | NULL    |                |
+| phoneno      | varchar(10)  | NO   |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+6 rows in set (0.05 sec)
+
+mysql> select * from orderdetails;;
++---------+-------------+------------+--------------+--------------+------------+
+| orderid | productname | orderdate  | customername | shippingdate | phoneno    |
++---------+-------------+------------+--------------+--------------+------------+
+|       6 | null        | 2013-10-31 | asdf         | 2013-10-31   | 22222222   |
+|       7 | null        | 2013-10-31 | asdfghjkll   | 2013-10-31   | 1234432112 |
+|       8 | null        | 2013-10-31 | asdfghjkll   | 2013-10-31   | 1234432112 |
+|       9 | Roadster    | 2013-10-31 | rakesh       | 2013-10-31   | 9666551236 |
+|      10 | iphone5c    | 2013-10-31 | jitu         | 2013-10-31   | 9876660012 |
+|      11 | puma        | 2013-10-31 | ram          | 2013-10-31   | 9126126126 |
+|      12 | puma        | 2013-11-01 | rahul        | 2013-11-01   | 8019904143 |
+|      13 | Roadster    | 2013-11-01 | rahul        | 2013-11-01   | 8019904143 |
+|      14 | Roadster    | 2013-11-01 | sumith       | 2013-11-01   | 9866445669 |
+|      15 | fm          | 2013-11-01 | rahul        | 2013-11-01   | 8019904143 |
+|      16 | duke        | 2013-11-01 | nitin        | 2013-11-01   | 99998888   |
+|      17 | duke        | 2013-11-02 | raman        | 2013-11-02   | 99999876   |
+|      18 | iphone5c    | 2013-11-04 | teja         | 2013-11-04   | 8098765432 |
+|      19 | fm          | 2013-11-05 | sumith       | 2013-11-05   | 9866445669 |
+|      20 | duke        | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      21 | duke        | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      22 | Roadster    | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      23 | puma        | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      24 | duke        | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      25 | biba        | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      26 | fm          | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      27 | duke        | 2013-11-05 | null         | 2013-11-05   | null       |
+|      28 | biba        | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      29 | biba        | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      30 | BBZ10       | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      31 | BBZ10       | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      32 | BBZ10       | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      33 | Note3       | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      34 | ipad        | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      35 | Roadster    | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      36 | xperia u    | 2013-11-05 | harish       | 2013-11-05   | 9494581503 |
+|      37 | iphone5c    | 2013-11-05 | sai          | 2013-11-05   | 8099005200 |
+|      38 | biba        | 2013-11-06 | talent       | 2013-11-06   | 1234567892 |
++---------+-------------+------------+--------------+--------------+------------+
+33 rows in set (0.00 sec)
+
+
+
+
+PRODUCT TABLE
+---------------
+
+CREATE TABLE product ( 
+		productid INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		productname VARCHAR(10) NOT NULL,unitprice INT(10) NOT NULL,
+		instock VARCHAR(10) NOT NULL DEFAULT 'YES',
+		shippingprice INT(10) NOT NULL DEFAULT 50,
+		quantity INT(10) NOT NULL,
+		productimage VARCHAR(200) NOT NULL);
+
+
+mysql> desc product;
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| productid     | int(10)      | NO   | PRI | NULL    | auto_increment |
+| productname   | varchar(10)  | NO   |     | NULL    |                |
+| unitprice     | int(10)      | NO   |     | NULL    |                |
+| instock       | varchar(10)  | NO   |     | YES     |                |
+| shippingprice | int(10)      | NO   |     | 50      |                |
+| quantity      | int(10)      | NO   |     | NULL    |                |
+| productimage  | varchar(200) | NO   |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
+7 rows in set (0.05 sec)
+
+mysql> select * from product;
++-----------+-------------+-----------+---------+---------------+----------+---------------------+
+| productid | productname | unitprice | instock | shippingprice | quantity | productimage        |
++-----------+-------------+-----------+---------+---------------+----------+---------------------+
+|         5 | Roadster    |       780 | yes     |            20 |        2 | images/roadster.jpg |
+|         6 | fm          |        20 | yes     |          1200 |       20 | images/fm.jpg       |
+|         7 | duke        |      1500 | yes     |           200 |       20 | image/duke.jpg      |
+|         8 | galaxy      |     24000 | yes     |            30 |       10 | images/gal-s4.png   |
+|         9 | puma        |       500 | yes     |           200 |        5 | images/puma.jpg     |
+|        11 | nike        |      2400 | yes     |            95 |       10 | images/nike.jpg     |
+|        12 | iphone5c    |     25000 | yes     |         25000 |      200 | images/i-5s.jpg     |
+|        13 | iphone5s    |      2499 | yes     |             1 |       10 | images/i-5s1.jpg    |
+|        14 | ipad        |     30000 | yes     |          6000 |       10 | images/ipad.png     |
+|        15 | BBZ10       |     20000 | yes     |             0 |      200 | images/b10.png      |
+|        16 | Note3       |     50000 | yes     |             0 |       10 | images/note-3.jpg   |
+|        17 | s4  mini    |     24000 | yes     |          1000 |       20 | images/s4-mini.jpg  |
+|        18 | xperia j    |     17500 | yes     |           500 |       10 | images/sony-j.jpg   |
+|        19 | xperia u    |     14000 | yes     |             0 |      100 | images/x-u.jpg      |
+|        20 | xperia z    |     50000 | yes     |             0 |     1000 | images/SONY-Z.jpg   |
+|        21 | xperia z1   |     34950 | yes     |            50 |        6 | images/sony-z1.jpg  |
+|        22 | biba        |      6800 | yes     |           200 |       20 | images/biba.jpg     |
+|        23 | book        |       350 | yes     |            50 |       10 |                     |
++-----------+-------------+-----------+---------+---------------+----------+---------------------+
+18 rows in set (0.00 sec)
+
+
+SHIPPING TABLE
+----------------
+
+mysql> create table shipping(orderid int(100) not null unique,productname varchar(100) not null,shipmentno int(100) not null unique auto_increment,dateshipped date not null,shippedby varchar(200) not null,customername varchar(255) not null,phoneno varchar(10) not null,foreign key(orderid) references orderDetails(orderid));
+
+
+
+mysql> desc shipping;
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| orderid      | int(100)     | NO   | PRI | NULL    |                |
+| productname  | varchar(100) | NO   |     | NULL    |                |
+| shipmentno   | int(100)     | NO   | UNI | NULL    | auto_increment |
+| dateshipped  | date         | NO   |     | NULL    |                |
+| shippedby    | varchar(200) | NO   |     | NULL    |                |
+| customername | varchar(255) | NO   |     | NULL    |                |
+| phoneno      | varchar(10)  | NO   |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+7 rows in set (0.09 sec)
+
+mysql> select * from shipping;
++---------+-------------+------------+-------------+--------------+--------------+------------+
+| orderid | productname | shipmentno | dateshipped | shippedby    | customername | phoneno    |
++---------+-------------+------------+-------------+--------------+--------------+------------+
+|       6 | null        |          9 | 2013-10-31  | shipper name | asdf         | 22222222   |
+|       7 | null        |          8 | 2013-10-31  | shipper name | asdfghjkll   | 1234432112 |
+|       8 | null        |         10 | 2013-10-31  | shipper name | asdfghjkll   | 1234432112 |
+|       9 | Roadster    |          1 | 2013-10-31  | shipper name | rakesh       | 9666551236 |
+|      10 | iphone5c    |          2 | 2013-10-31  | shipper name | jitu         | 9876660012 |
++---------+-------------+------------+-------------+--------------+--------------+------------+
+5 rows in set (0.00 sec)
+
+mysql>
